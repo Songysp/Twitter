@@ -11,6 +11,7 @@ app.use('/tweets', tweetsRouter);
 
 app.use((req, res, next) => {
     res.sendStatus(404);
+    console.error(error);
 });
 
 app.listen(8080);
