@@ -32,14 +32,15 @@ export async function createTweet(req, res, next){
     }
 }
 
-// 트윗을 수정하는 함수
-export async function updateTweet(req, res, next){
-    const tweet = tweetRepository.update(req.params.id, req.params.text);
-    console.log(tweet);
+// 트윗을 변경하는 함수
+export async function updateTweet(req, res, next) {
+    const id = req.params.id;
+    const text = req.body.text;
+    const tweet = await tweetRepository.update(id, text);
     if(tweet){
-        res.status(200).json(tweet);
+        res.status(201).json(tweet);
     }else{
-        res.status(404).json({message: `${id}해당 트윗이 없습니다`});
+        res.status(404).json({message: `${id}의 트윗이 없습니다`})
     }
 }
 
