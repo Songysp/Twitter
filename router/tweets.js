@@ -1,7 +1,7 @@
 import express from "express";
 import * as tweetController from "../controller/tweet.js";
 import { body } from 'express-validator';
-import { validate } from '../middleware/validation.js';
+import { validate } from '../middleware/validator.js';
 
 const router = express.Router();
 
