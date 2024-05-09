@@ -47,5 +47,5 @@ export async function updateTweet(req, res, next) {
 // 트윗을 삭제하는 함수
 export async function deleteTweet(req, res, next){
     const tweet = await tweetRepository.remove(req.params.id);
-    res.sendStatus(204).json(tweet);
+    res.sendStatus(204)
 }

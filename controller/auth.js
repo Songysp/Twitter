@@ -2,20 +2,26 @@ import * as authRepository from '../data/auth.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { config } from '../config.js';
+
+
 function createJwtToken(id){
     return jwt.sign({id}, config.jwt.secretKey, {expiresIn: config.jwt.expiresInSec});
 }
+
+
 export async function signup(req, res, next){
-    const {username, password, name, email, url} = req.body;
+    let {username, password, name, email, url} = req.body;
     const found = await authRepository.findByUsername(username);
     if(found){
         return res.status(409).json({message:`${username}이 이미 있습니다`});
     }
-    const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
-    const userId = await authRepository.createUser({username, hashed, name, email, url});
+    password = await bcrypt.hash(password, config.bcrypt.saltRounds);
+    const userId = await authRepository.createUser({username, password, name, email, url});
     const token = createJwtToken(userId);
     res.status(201).json({token, username});
 }
+
+
 export async function login(req, res, next){
     const {username, password} = req.body;
     // const user = await authRepository.login(username);
@@ -31,12 +37,16 @@ export async function login(req, res, next){
     const token = createJwtToken(user.id);
     res.status(200).json({token, username});
 }
+
+
 // export async function verify(req, res, next){
 //     const token = req.header['Token'];
 //     if(token){
 //         res.status(200).json(token);
 //     }
 // }
+
+
 export async function me(req, res, next){
     const user = await authRepository.findById(req.userId);
     if(!user){
